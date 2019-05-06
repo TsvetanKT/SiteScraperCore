@@ -1,5 +1,6 @@
 package Application;
 
+import java.util.Arrays;
 import java.util.List;
 import web.WebScraper;
 
@@ -16,5 +17,11 @@ public class SiteScraper {
     // TODO
     System.err.println("ERROR NOT implemented " + sourceName);
     return null;
+  }
+  
+ public static List<String> getImplementedSources() {
+    
+    // TODO just for tests
+    return Arrays.asList("Google Images", "Other");
   }
 }

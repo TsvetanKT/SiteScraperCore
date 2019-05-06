@@ -3,6 +3,7 @@ package web;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,11 +26,11 @@ public class WebScraper {
   public List<String> getGoogleImages(String url) {
     List<String> imageUrls = new ArrayList<>();
     try {
-      WebClient webClient = gethtmlUnitClient();
+      WebClient webClient = getHtmlUnitClient();
       HtmlPage page = webClient.getPage(url);
       
       
-      webClient.getCurrentWindow().setInnerHeight(8000);
+      //webClient.getCurrentWindow().setInnerHeight(8000);
 
       /*
        * page.executeJavaScript("window.scrollTo(0,document.body.scrollHeight);");
@@ -58,7 +59,7 @@ public class WebScraper {
     return imageUrls;
   }
 
-  static public WebClient gethtmlUnitClient() {
+  private static WebClient getHtmlUnitClient() {
     WebClient webClient;
     /*LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log",
         "org.apache.commons.logging.impl.NoOpLog");*/
