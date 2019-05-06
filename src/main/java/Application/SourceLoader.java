@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SourceLoader {
@@ -17,13 +15,6 @@ public class SourceLoader {
   private static final String SOURCEFILE_EXTENSION = ".json";
   private static final String SOURCES_FOLDER = "/sources/";
 
-  public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
-    
-    List<SourceObj> sources = laodAllSources();
-    for (SourceObj sourceObj : sources) {
-      System.out.println(sourceObj.parentXpath);
-    }
-  }
   
   public static List<SourceObj> laodAllSources() throws IOException {
     
