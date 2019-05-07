@@ -21,6 +21,10 @@ public class SiteScraper {
   }
 
   public List<String> getIteration(String sourceName, String query, int iteratio) {
+    
+    if (query == null || query.isEmpty()) {
+      return null;
+    }
 
     if (sourceName.contains("Google")) {
       WebScraper webScraper = new WebScraper();
