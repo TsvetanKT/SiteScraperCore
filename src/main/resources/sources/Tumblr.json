@@ -1,0 +1,8 @@
+{
+  "sourceName":"Tumblr Blog",
+  "type":"api",
+  "urlQueryString":"https://www.google.com/search?tbm=isch&q=%s",
+  "parentXpath":"//div[@class='rg_meta notranslate']",
+  "elementParser":"json",
+  "elementValue":"ou"
+}

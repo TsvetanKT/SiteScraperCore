@@ -23,6 +23,8 @@ import org.apache.http.message.BasicNameValuePair;
 public class ApiScraper implements IScraper {
 
   public List<String> getIteration(SourceObj sourceObj, String query, int iteration) {
+    
+    System.out.println("called API");
     return null;
   }
 

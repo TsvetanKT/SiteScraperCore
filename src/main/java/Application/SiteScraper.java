@@ -20,21 +20,6 @@ public class SiteScraper {
   public SiteScraper() {
     initSources();
   }
-
-  /*public List<String> getIteration(String sourceName, String query, int iteratio) {
-    
-    if (query == null || query.isEmpty()) {
-      return null;
-    }
-
-    if (sourceName.contains("Google")) {
-      WebScraper webScraper = new WebScraper();
-      return webScraper.getGoogleImages("https://www.google.com/search?tbm=isch&q=" + query);
-    }
-
-    System.err.println("ERROR NOT implemented " + sourceName);
-    return null;
-  }*/
   
   public List<String> getIteration(String sourceName, String query, int iteration) {
     
