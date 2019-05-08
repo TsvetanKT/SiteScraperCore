@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import web.WebScraper;
+import Application.SourceObj.SourceExtractType;
 
 public class SiteScraper {
   
@@ -20,7 +21,7 @@ public class SiteScraper {
     initSources();
   }
 
-  public List<String> getIteration(String sourceName, String query, int iteratio) {
+  /*public List<String> getIteration(String sourceName, String query, int iteratio) {
     
     if (query == null || query.isEmpty()) {
       return null;
@@ -31,10 +32,38 @@ public class SiteScraper {
       return webScraper.getGoogleImages("https://www.google.com/search?tbm=isch&q=" + query);
     }
 
-    // TODO
     System.err.println("ERROR NOT implemented " + sourceName);
     return null;
+  }*/
+  
+  public List<String> getIteration(String sourceName, String query, int iteration) {
+    
+    if (query == null || query.isEmpty()) {
+      return null;
+    }
+
+    SourceObj sourceObj = sources.stream().filter(s -> s.getSourceName().equals(sourceName)).findFirst().get();
+    
+    if (sourceObj == null) {
+      // Throw exception
+      return null;
+    }
+    
+    IScraper scraper = null;
+    switch (sourceObj.getType()) {
+      case WEB:
+        scraper = new WebScraper();
+        break;
+      case API:
+        scraper = new ApiScraper();
+        break;
+      default:
+        throw new NotImplementedException("Not implemented extract type " + sourceObj.getType());
+    }
+
+    return scraper.getIteration(sourceObj, query, iteration);
   }
+  
 
   public List<String> getImplementedSources() {
     return sources.stream().map(s -> s.getSourceName()).collect(Collectors.toList());
@@ -46,7 +75,7 @@ public class SiteScraper {
         sources = SourceLoader.laodAllSources();
       }
     } catch (IOException e) {
-      logger.error("Cannot laod sources " + e.getMessage() );
+      logger.error("Cannot laod sources " + e.getMessage());
     }
   }
 }

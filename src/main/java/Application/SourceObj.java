@@ -1,13 +1,28 @@
 package Application;
 
 public class SourceObj {
-  public String sourceName;
-  public String type;
-  public String urlQueryString;
-  public String parentXpath;
-  public String elementParser;
-  public String elementValue;
+  private String sourceName;
+  private SourceExtractType type;
+  private String urlQueryString;
+  private String parentXpath;
+  private String elementParser;
+  private String elementValue;
 
+  public enum SourceExtractType {
+    WEB,
+    API;
+    
+    public static SourceExtractType fromString(String type) {
+      for (SourceExtractType extractType : SourceExtractType.values()) {
+        if (extractType.name().toLowerCase().equals(type.toLowerCase())) {
+          return extractType;
+        }
+      }
+      
+      throw new IllegalArgumentException("Bad SourceExtractType: " + type);
+    }
+  }
+  
   public String getSourceName() {
     return sourceName;
   }
@@ -16,12 +31,12 @@ public class SourceObj {
     this.sourceName = sourceName;
   }
 
-  public String getType() {
+  public SourceExtractType getType() {
     return type;
   }
 
   public void setType(String type) {
-    this.type = type;
+    this.type = SourceExtractType.fromString(type);
   }
 
   public String getUrlQueryString() {

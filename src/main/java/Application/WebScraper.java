@@ -1,17 +1,12 @@
-package web;
+package Application;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
-import com.gargoylesoftware.css.parser.CSSErrorHandler;
-import com.gargoylesoftware.css.parser.CSSException;
-import com.gargoylesoftware.css.parser.CSSParseException;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.IncorrectnessListener;
 import com.gargoylesoftware.htmlunit.ScriptException;
@@ -21,34 +16,22 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 
-public class WebScraper {
+public class WebScraper implements IScraper {
 
-  public List<String> getGoogleImages(String url) {
+  public List<String> getIteration(SourceObj sourceObj, String query, int iteration) {
     List<String> imageUrls = new ArrayList<>();
     try {
       WebClient webClient = getHtmlUnitClient();
-      HtmlPage page = webClient.getPage(url);
+      String queryUrl = String.format(sourceObj.getUrlQueryString(), query);
+      HtmlPage page = webClient.getPage(queryUrl);
       
-      
-      //webClient.getCurrentWindow().setInnerHeight(8000);
+      List<Object> imageData = page.getByXPath(sourceObj.getParentXpath());
 
-      /*
-       * page.executeJavaScript("window.scrollTo(0,document.body.scrollHeight);");
-       * webClient.waitForBackgroundJavaScript(2000);
-       * page.executeJavaScript("window.scrollTo(0,document.body.scrollHeight);");
-       * webClient.waitForBackgroundJavaScript(2000);
-       */
-
-      // webClient.getCurrentWindow().setInnerHeight(60000);
-      
-      List<Object> imageData = page.getByXPath("//div[@class='rg_meta notranslate']");
-
-
-      for (Object div : imageData) {
-        DomElement divObj = (DomElement) div;
+      for (Object parent : imageData) {
+        DomElement divObj = (DomElement) parent;
         String inerText = divObj.getTextContent();
         JSONObject jsonObj = new JSONObject(inerText);
-        String imgUrl = jsonObj.getString("ou");
+        String imgUrl = jsonObj.getString(sourceObj.getElementValue());
         imageUrls.add(imgUrl);
       }
 
@@ -100,6 +83,5 @@ public class WebScraper {
 
     webClient.getOptions().setThrowExceptionOnScriptError(false);
     return webClient;
-
   }
 }
