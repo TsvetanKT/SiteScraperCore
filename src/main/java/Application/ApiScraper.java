@@ -2,7 +2,9 @@ package Application;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.httpclient.HttpClient;
@@ -75,7 +77,8 @@ public class ApiScraper implements IScraper {
         query = prepareUrl(query);
 
         List<String> iterationUrls = getIterationUrls(query, PAGES_PER_ITERATION, iteration);
-        List<String> imageUrls = new ArrayList<>();
+        LinkedHashSet<String> imageUrls = new LinkedHashSet<>();
+        
         String rawPage = "";
 
         for (int i = 0; i < iterationUrls.size(); i++) {
@@ -83,7 +86,7 @@ public class ApiScraper implements IScraper {
             imageUrls.addAll(parsePageImages(rawPage));
         }
 
-        return imageUrls;
+        return new ArrayList<>(imageUrls);
     }
 
     private static List<String> parsePageImages(String rawPage) {
@@ -93,7 +96,8 @@ public class ApiScraper implements IScraper {
         String startKeyword = "\"photo-url-1280\":\"";
         String endKeyword = "\"";
         String imageUrl = "";
-        List<String> imageUrls = new ArrayList<>();
+        
+        Set<String> imageUrls = new LinkedHashSet<>();
         while (lastStartIndex != -1) {
 
             lastStartIndex = rawPage.indexOf(startKeyword, lastStartIndex);
@@ -108,7 +112,7 @@ public class ApiScraper implements IScraper {
             }
         }
 
-        return imageUrls;
+        return new ArrayList<>(imageUrls);
     }
 
     /**
@@ -124,7 +128,7 @@ public class ApiScraper implements IScraper {
         int startNum = pagesPerIteration * (iteration - 1);
         int endNum = startNum + pagesPerIteration;
 
-        List<String> urList = new ArrayList<>(pagesPerIteration);
+        ArrayList<String> urlList = new ArrayList<>(pagesPerIteration);
 
         for (int i = startNum; i <= endNum; i++) {
             if (i == 1) {
@@ -132,10 +136,10 @@ public class ApiScraper implements IScraper {
                 continue;
             }
 
-            urList.add(String.format(urlFormat, i));
+            urlList.add(String.format(urlFormat, i));
         }
 
-        return urList;
+        return urlList;
     }
 
     private String getRawPage(String url) {
@@ -163,8 +167,6 @@ public class ApiScraper implements IScraper {
      *         http://its-a-cat-world.tumblr.com/page/%s/json
      */
     private static String prepareUrl(String query) {
-
-
 
         Matcher nameMatch = TUMBLR_NAME_PATERN.matcher(query);
         String tumblrName = nameMatch.find() ? nameMatch.group() : query;
